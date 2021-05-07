@@ -30,7 +30,27 @@ namespace Web.Controllers
         {
             var basketId = await _basketViewModelService.GetOrCreateBasketIdAsync();
             await _basketService.AddItemToBasket(basketId, productId, quantity);
+
             return Json(await _basketViewModelService.GetBasketItemsCountViewModel(basketId));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveBasketItem(int basketItemId)
+        {
+            var basketId = await _basketViewModelService.GetOrCreateBasketIdAsync();
+            await _basketService.DeleteBasketItem(basketId, basketItemId);
+            return PartialView("_BasketPartial", await _basketViewModelService.GetBasketViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateBasketItem(int basketItemId, int quantity)
+        {
+            if (quantity < 1)
+                return BadRequest("The quantity cannot be less than 1.");
+
+            var basketId = await _basketViewModelService.GetOrCreateBasketIdAsync();
+            await _basketService.UpdateBasketItem(basketId, basketItemId, quantity);
+            return PartialView("_BasketPartial", await _basketViewModelService.GetBasketViewModel());
         }
     }
 }
