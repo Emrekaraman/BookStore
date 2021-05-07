@@ -57,6 +57,8 @@
                 },
                 success: function (data) {
                     $("#navBasketItemsCount").text(data.basketItemsCount);
+                    //toastr için iki gerekli kütüpaneyi indirdik ve yolunu verdik.
+                    toastr.success("the item has been added to the basket.")
                 }
             });
         });
